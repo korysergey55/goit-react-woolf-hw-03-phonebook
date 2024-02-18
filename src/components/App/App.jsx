@@ -10,10 +10,24 @@ import Filter from 'components/filter/Filter';
 
 
 class App extends Component {
+
   state = {
     contacts: [{ id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
     ],
     filter: '',
+  }
+
+  componentDidMount() {
+    const localData = localStorage.getItem('contacts')
+    if (localData) {
+      this.setState({ contacts: JSON.parse(localData) })
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts.length !== this.state.contacts.length) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
+    }
   }
   createNewContact = (data) => {
     if (!this.isNotDublicate(data)) return
